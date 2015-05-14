@@ -16,6 +16,22 @@ public class PlayerController : MonoBehaviour
     public float Tilt;
     public Boundry GameBoundry;
 
+    public GameObject Shot;
+    public Transform ShowSpawn;
+    public float FireRate;
+
+    private float _nextFire;
+
+    void Update()
+    {
+        if (Input.GetButton("Fire1") && Time.time > _nextFire)
+        {
+            _nextFire = Time.time + FireRate;
+            Instantiate(Shot, ShowSpawn.position, ShowSpawn.rotation);
+            GetComponent<AudioSource>().Play();
+        }
+    }
+
     void FixedUpdate()
     {
         var moveHorizontal = Input.GetAxis("Horizontal");
