@@ -10,10 +10,4 @@ public class Mover : MonoBehaviour
         var boltRigidBody = GetComponent<Rigidbody>();
         boltRigidBody.velocity = transform.forward*Speed;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

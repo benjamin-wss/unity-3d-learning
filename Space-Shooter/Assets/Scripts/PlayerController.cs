@@ -41,17 +41,27 @@ public class PlayerController : MonoBehaviour
         var movementVector = new Vector3(moveHorizontal, 0.0f, moveVertical);
         playerRigidBody.velocity = movementVector * Speed;
 
-        playerRigidBody.position = new Vector3(
-                Mathf.Clamp(
-                    playerRigidBody.position.x,
-                    GameBoundry.MinimumClampForXAxis,
-                    GameBoundry.MaximumClampForXAxis),
-                0.0f,
-                Mathf.Clamp(
-                    playerRigidBody.position.z,
-                    GameBoundry.MinimumClampForZAxis,
-                    GameBoundry.MaximumClampForZAxis));
+        playerRigidBody.position = GeneratePlayerRigidBodyClampingPosition(playerRigidBody, GameBoundry);
 
         playerRigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, playerRigidBody.velocity.x * -Tilt);
+    }
+
+    private static Vector3 GeneratePlayerRigidBodyClampingPosition(Rigidbody playerRigidBody, Boundry gameBoundry)
+    {
+        var xAxisClamp = Mathf.Clamp(
+            playerRigidBody.position.x,
+            gameBoundry.MinimumClampForXAxis,
+            gameBoundry.MaximumClampForXAxis);
+
+        const float yAxisClamp = 0.0f;
+
+        var zAxisClamp = Mathf.Clamp(
+            playerRigidBody.position.z,
+            gameBoundry.MinimumClampForZAxis,
+            gameBoundry.MaximumClampForZAxis);
+
+        var clampedPlayerPosition = new Vector3(xAxisClamp, yAxisClamp, zAxisClamp);
+
+        return clampedPlayerPosition;
     }
 }
