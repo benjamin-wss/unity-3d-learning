@@ -35,16 +35,24 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        var playerRigidBody = GetComponent<Rigidbody>();
+
+        var playerRigidbodyVeclocity = SetupPlayerRigidbodyVeclocity(Speed);
+        playerRigidBody.velocity = playerRigidbodyVeclocity;
+
+        playerRigidBody.position = GeneratePlayerRigidBodyClampingPosition(playerRigidBody, GameBoundry);
+        playerRigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, playerRigidBody.velocity.x * -Tilt);
+    }
+
+    private static Vector3 SetupPlayerRigidbodyVeclocity(float speed)
+    {
         var moveHorizontal = Input.GetAxis("Horizontal");
         var moveVertical = Input.GetAxis("Vertical");
 
-        var playerRigidBody = GetComponent<Rigidbody>();
         var movementVector = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        playerRigidBody.velocity = movementVector * Speed;
+        var playerRigidbodyVelocity = movementVector*speed;
 
-        playerRigidBody.position = GeneratePlayerRigidBodyClampingPosition(playerRigidBody, GameBoundry);
-
-        playerRigidBody.rotation = Quaternion.Euler(0.0f, 0.0f, playerRigidBody.velocity.x * -Tilt);
+        return playerRigidbodyVelocity;
     }
 
     private static Vector3 GeneratePlayerRigidBodyClampingPosition(Rigidbody playerRigidBody, Boundry gameBoundry)
