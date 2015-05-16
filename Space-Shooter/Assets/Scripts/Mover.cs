@@ -4,7 +4,10 @@ public class Mover : MonoBehaviour
 {
     public float Speed;
 
-    // Use this for initialization
+    /// <summary>
+    /// Initialize function. 
+    /// Simillar to constructor functionality.
+    /// </summary>
     void Start()
     {
         var boltRigidBody = GetComponent<Rigidbody>();
