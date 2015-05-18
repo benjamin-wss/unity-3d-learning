@@ -1,19 +1,52 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using JetBrains.Annotations;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject Hazzard;
+    public GameObject Hazard;
     public Vector3 BaseSpawnPosition;
+    public int HazardCount;
+    public float SpawnWait;
+    public float StartWait;
+    public float WaveWait;
 
     void Start()
     {
-        var randomizedSpawnPosition = new Vector3(Random.Range(-BaseSpawnPosition.x, BaseSpawnPosition.x), BaseSpawnPosition.y, BaseSpawnPosition.z);
-        var spawnRotation = Quaternion.identity;
-        SpawnWaves(Hazzard, randomizedSpawnPosition, spawnRotation);
+        StartCoroutine(SpawnWaves(Hazard, BaseSpawnPosition, HazardCount, SpawnWait, StartWait, WaveWait));
     }
 
-    private static void SpawnWaves(GameObject hazzard, Vector3 spawnPosition, Quaternion spawnRotation)
+    private static IEnumerator SpawnWaves(
+        [NotNull] GameObject hazzard, 
+        Vector3 baseSpawnPosition, 
+        int hazardCount, 
+        float spawnWait,
+        float startWait, 
+        float waveWait)
     {
-        Instantiate(hazzard, spawnPosition, spawnRotation);
+        if (hazzard == null) throw new ArgumentNullException("hazzard");
+
+        yield return new WaitForSeconds(startWait);
+        while (true)
+        {
+            for (var i = 0; i < hazardCount; i++)
+            {
+                var reandomizedXAxisPosition = Random.Range(-baseSpawnPosition.x, baseSpawnPosition.x);
+                var randomizedSpawnPosition = new Vector3(
+                    reandomizedXAxisPosition,
+                    baseSpawnPosition.y,
+                    baseSpawnPosition.z);
+
+                var spawnRotation = Quaternion.identity;
+
+                Instantiate(hazzard, randomizedSpawnPosition, spawnRotation);
+
+                yield return new WaitForSeconds(spawnWait);
+            }
+            yield return new WaitForSeconds(waveWait);
+        }
+        
     }
 }

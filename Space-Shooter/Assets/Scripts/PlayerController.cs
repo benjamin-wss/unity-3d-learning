@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
         {
             _nextFire = Time.time + FireRate;
             Instantiate(Shot, ShowSpawn.position, ShowSpawn.rotation);
-            // TODO: Add sound fx
-            // GetComponent<AudioSource>().Play();
+            // Play laser gun sound
+            GetComponent<AudioSource>().Play();
         }
     }
 
